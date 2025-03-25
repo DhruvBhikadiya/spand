@@ -15,6 +15,8 @@ const courseRoutes = require("./routes/courseRoutes");
 const aboutusRoutes = require('./routes/aboutusRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
+const lessonRoutes = require('./routes/lessonRoutes');
+const coursepurchaseRoutes = require('./routes/coursepurchaseRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -43,6 +45,8 @@ app.use('/api/course', courseRoutes);
 app.use('/api/aboutus', aboutusRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/testimonial', testimonialRoutes);
+app.use('/api/lesson', lessonRoutes);
+app.use('/api/coursepurchase', coursepurchaseRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

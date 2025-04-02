@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 const coursepurchase = {
   create: async (data) => {
-    const sql = 'INSERT INTO coursepurchase (courseId, userId, amount, courseName, expireDate, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())';
+    const sql = 'INSERT INTO coursepurchase (courseId, userId, amount, courseName, expireDate, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())';
     try {
       const [results] = await db.execute(sql, [data.courseId, data.userId, data.amount, data.courseName, data.expireDate]);
       

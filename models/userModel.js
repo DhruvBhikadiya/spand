@@ -1,16 +1,30 @@
 const db = require('../config/db');
 
 const userJson = {
-    create: async (latitude , longitude , data, city , region, country) => {
-        const sql = 'INSERT INTO user (name, password, mobile, email, latitude, longitude, ip, city , region, country, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())';
+    create: async (latitude, longitude, data, city, region, country) => {
+        const checkSql = 'SELECT * FROM user WHERE email = ? OR mobile = ?';
+        const insertSql = 'INSERT INTO user (name, password, mobile, email, latitude, longitude, ip, city , region, country, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())';
+    
         try {
-            const [results] = await db.execute(sql, [data.name, data.password, data.mobile, data.email, latitude, longitude, data.ip, city , region, country]);
-
+            const [existingUsers] = await db.execute(checkSql, [data.email, data.mobile]);
+    
+            if (existingUsers.length > 0) {
+                return {
+                    status: 'error',
+                    message: 'Email or mobile number already exists.'
+                };
+            }
+    
+            const [results] = await db.execute(insertSql, [data.name, data.password, data.mobile, data.email, latitude, longitude, data.ip, city , region, country]);
+    
             const insertedId = results.insertId;
-
+    
             const [createdUser] = await db.execute('SELECT * FROM user WHERE id = ?', [insertedId]);
-
-            return { status: 'success', data: createdUser[0] };
+    
+            return {
+                status: 'success',
+                data: createdUser[0]
+            };
         } catch (err) {
             throw err;
         }

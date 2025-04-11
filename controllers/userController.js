@@ -10,7 +10,11 @@ exports.createUser = async (req, res) => {
             const { lat, lon, city , regionName, country } = IPData.data;
         
             const result = await User.create(lat, lon, req.body, city , regionName, country);
-            res.status(201).json({ message: 'User created', user: result });
+            if(result.status == 'error'){
+                res.status(400).json({ message: 'Email or mobile number already exists.' });
+            }else{
+                res.status(201).json({ message: 'User created', user: result });
+            }
         }else{
             res.status(400).json({ error: 'Ip Required for Creating any Store User' });
         }
